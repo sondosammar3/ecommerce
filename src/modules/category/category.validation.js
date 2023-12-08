@@ -10,3 +10,9 @@ export const createCategorySchema = joi.object({
 export const getSpecificCategorySchema = joi.object({
     id: generalFields.id.required()
 })
+
+export const deleteCategory=joi.object({
+
+    id: generalFields.id.required()
+
+})

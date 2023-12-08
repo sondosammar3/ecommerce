@@ -1,6 +1,8 @@
 import slugify from "slugify";
 import categoryModel from "../../../DB/model/category.model.js";
 import cloudinary from "../../services/cloudinary.js";
+import { pagination } from "../../services/pagination.js";
+import productModel from "../../../DB/model/product.model.js";
 
 export const getCategories = async (req, res) => {
 
@@ -10,12 +12,18 @@ export const getCategories = async (req, res) => {
 }
 
 export const getActiveCategoies = async (req, res) => {
-    const categories = await categoryModel.find({ status: "Active" }).select("name image");
-    return res.status(200).json({ message: "success", categories });
+    const {skip,limit}=pagination(req.query.page,req.query.limit)
+
+    const categories = await categoryModel.find({ status: "Active" }).skip(skip).limit(limit).select("name image");
+    return res.status(200).json({ message: "success",count:categories.length, categories });
 }
 export const getSpecificCategory = async (req, res) => {
     const { id } = req.params;
     const category = await categoryModel.findById(id);
+    if(!category){
+        return res.status(404).json({ message: "not found" });
+
+    }
     return res.status(201).json({ message: "success", category });
 }
 export const createCategory = async (req, res) => {
@@ -45,7 +53,8 @@ export const updateCategory = async (req, res) => {
         }
 
         if (name) {
-            if(await categoryModel.findOne({name})){
+            if(await categoryModel.findOne({name,_id:{$ne:id._id} }))
+            {
                 return res.status(409).json({message: `category ${name} already exists`});
             }
             category.name = name;
@@ -71,3 +80,15 @@ export const updateCategory = async (req, res) => {
 
 }
 
+export const deleteCategory=async(req,res,next)=>{
+  
+    const {categoryId}=req.params
+    await categoryModel.findByIdAndDelete(categoryId)
+    if(!categoryId){
+        return next(new Error (`category not found`,{cause:404}))
+
+    }
+    await productModel.deleteMany({categoryId})
+    return res.status(200).json({message:"success"})
+
+}

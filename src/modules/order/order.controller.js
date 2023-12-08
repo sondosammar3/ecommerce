@@ -9,7 +9,7 @@ export const createOrder = async (req, res, next) => {
 
     // check cart
     const cart = await cartModel.findOne({ userId: req.user._id });
-    if (!cart) {
+    if (!cart || cart.products.length==0) {
         return next(new Error('cart is empty', { cause: 400 }));
     }
     req.body.products = cart.products;
