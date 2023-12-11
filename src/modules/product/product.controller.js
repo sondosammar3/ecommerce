@@ -4,21 +4,32 @@ import subcategoryModel from "../../../DB/model/subcategory.model.js";
 import cloudinary from "../../services/cloudinary.js";
 import productModel from "../../../DB/model/product.model.js";
 import { pagination } from "../../services/pagination.js";
-
-export const getProducts =async (req, res) => {
-  const {skip,limit}=pagination(req.query.page,req.query.limit)
-  const queryobj={...req.query}
-  const execquery=['page','limit','skip','sort']
-  execquery.map((ele)=>{
-    delete queryobj[ele]
-  })
-  queryobj=JSON.stringify(queryobj)
-  queryobj=queryobj.replace(/\b(gt|gte|lt|lte|in|nin|eq|niq|gte)\b /g,match=>`$${match}`)
-  const mongooseQuery=productModel.find(queryobj).limit(limit).skip(skip)
-  queryobj=JSON.parse(queryobj)
-  const product=await mongooseQuery.sort(req.query.sort?.replaceAll(',',' '))
-      const count =await productModel.estimatedDocumentCount() 
-  return res.json({message:"message",page:product.length,total:count,product})
+export const getProducts = async (req, res) => {
+    const { skip, limit } = pagination(req.query.page, req.query.limit);
+    let queryObj = { ...req.query };
+    const execQuery = ['page', 'limit', 'sort', 'search', 'fields'];
+    execQuery.map((ele) => {
+        delete queryObj[ele];
+    });
+    queryObj = JSON.stringify(queryObj);
+    queryObj = queryObj.replace(/\b(gt|gte|lt|lte|in|nin|eq|neq)\b/g, match => `$${match}`);
+    queryObj = JSON.parse(queryObj);
+    let mongooseQuery = productModel.find(queryObj);
+    if (req.query.search) {
+        mongooseQuery.find({
+            $or: [
+                { name: { $regex: req.query.search, $options: 'i' } }, //$options : 'i' for case insensitive
+                { description: { $regex: req.query.search, $options: 'i' } }
+            ]
+        });
+    }
+    const count = await mongooseQuery.clone().countDocuments();
+    mongooseQuery = mongooseQuery.select(req.query.fields?.replaceAll(',', ' '))
+                                 .limit(limit)
+                                 .skip(skip)
+                                 .sort(req.query.sort?.replaceAll(',', ' '));
+    const products = await mongooseQuery;
+    return res.json({ message: "success", pageCount: products.length, totalCount: count, products });
 }
 
 export const createProduct = async (req, res) => {
