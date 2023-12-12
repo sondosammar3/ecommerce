@@ -73,3 +73,27 @@ export const createOrder = async (req, res, next) => {
 
     return res.status(201).json({ message: "success", order });
 }
+
+export const cancelOrder=async(req,res,next) =>{
+const {orderId}=req.params
+const order=await orderModel.findOne({_id:orderId,userId:req.user._id})
+if(!order){
+    return next(new Error('invalid order',{cause:404}))
+}
+if(order.status!='pending'){
+    return next(new Error('cant cancel this order',{cause:404}))
+
+}
+req.body.status='cancelled'
+req.body.updateBy=req.user._id;
+const newOrder=await orderModel.findByIdAndUpdate(orderId,req.body,{new:true})
+
+for (const product of order.products) {
+    await productModel.updateOne({ _id: product.productId }, { $inc: { stock:product.quantity } });
+}
+if (order.couponName) {
+    await couponModel.updateOne({ _id: req.body.coupon._id }, { $pull: { usedBy: req.user.id } }); //addToSet : add without dublicate
+}
+
+return res.json({message:"success",newOrder})
+}
