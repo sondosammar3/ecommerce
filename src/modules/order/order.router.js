@@ -10,7 +10,7 @@ const router = Router();
 
 
 router.post('/', auth(endPoint.create),validation(orderSchema.create), asyncHandler(orderController.createOrder));
-
+router.get('/',auth(endPoint.create),asyncHandler(orderController.getOrder))
 
 router.patch('/cancel/:orderId',auth(endPoint.cancel),asyncHandler(orderController.cancelOrder))
 

@@ -97,3 +97,9 @@ if (order.couponName) {
 
 return res.json({message:"success",newOrder})
 }
+
+export const getOrder=async(req,res,next)=>{
+const order=await orderModel.find({userId:req.user._id})
+return res.json({message:"success",order})
+
+}
