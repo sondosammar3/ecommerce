@@ -103,3 +103,27 @@ const order=await orderModel.find({userId:req.user._id})
 return res.json({message:"success",order})
 
 }
+
+export const changeStatus=async(req,res,next)=>{
+    const {orderId}=req.params
+    const order =await orderModel.findById(orderId)
+    if(!order){
+        return next(new Error('order not found',{cause:404}))
+
+    }
+    if(order.status=='cancelled'|| order.status=='deliverd'){
+        return next(new Error('cant cancel order',{cause:404}))
+
+    }
+    const newOrder =await orderModel.findByIdAndUpdate(orderId,{status:req.body.status},{new:true})
+       if(req.body.status=='cancelled'){
+        for(const product of order.products){
+            await productModel.updateOne({_id:product.productId},{$inc:{stock:product.quantity}})
+        }
+        if (order.couponName) {
+            await couponModel.updateOne({ name:order.couponName }, { $pull: { usedBy:order.userId} }); //addToSet : add without dublicate
+        }
+       }
+       
+    return res.json({message:"success",newOrder})
+}

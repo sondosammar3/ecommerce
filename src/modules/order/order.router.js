@@ -13,5 +13,5 @@ router.post('/', auth(endPoint.create),validation(orderSchema.create), asyncHand
 router.get('/',auth(endPoint.create),asyncHandler(orderController.getOrder))
 
 router.patch('/cancel/:orderId',auth(endPoint.cancel),asyncHandler(orderController.cancelOrder))
-
+router.patch('/changeOrderStatus/:orderId',auth(endPoint.change),asyncHandler(orderController.changeStatus))
 export default router;
