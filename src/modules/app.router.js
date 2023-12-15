@@ -11,6 +11,13 @@ import { globalErrorHandler } from '../services/errorHandling.js';
 
 const initApp = (app, express) => {
     app.use(express.json());
+    /* app.use(async(req,res,next)=>{
+   let whitelist =['http://www.tariq.com']
+   if(!whitelist.includes(req.header('origin'))){
+   return next(new Error('invalid'),{cause:404})
+   }else{
+   next();
+}})*/
     connectDB();
     app.use('/category', categoryRouter);
     app.use('/product', productRouter);
