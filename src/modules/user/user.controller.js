@@ -6,6 +6,7 @@ import userModel from "../../../DB/model/user.model.js"
 
 
 import XLSX from 'xlsx'
+import { createPdf } from "../../services/pdf.js"
  export const  uploadUserExcel=async(req,res,next)=>{
 
    const workBook=XLSX.readFile(req.file.path);
@@ -16,4 +17,11 @@ import XLSX from 'xlsx'
    }
   
    return res.status(201).json({message:"success"})
+ }
+
+
+ export const getUsers=async(req,res,next)=>{
+    let users=await userModel.find({})
+    await createPdf(users)
+return res.json({message:"success",users})
  }

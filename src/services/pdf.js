@@ -5,7 +5,7 @@ import { dirname, join } from "path";
 import { options } from "./option.js";
 const __filename=fileURLToPath(import.meta.url)
  const __dirname=dirname(__filename)
- let users = [
+/* let users = [
     {
       name: "Shyam",
       age: "26",
@@ -18,8 +18,8 @@ const __filename=fileURLToPath(import.meta.url)
       name: "Vitthal",
       age: "26",
     },
-  ];
-export  const createPdf =()=>{
+  ];*/
+export  const createPdf =(users)=>{
     //let html = fs.readFileSync("pdf.html", "utf8");
    const htmlpath=join(__dirname,'../../templtes/pdf.html')
    const html=fs.readFileSync(htmlpath,"utf8")
