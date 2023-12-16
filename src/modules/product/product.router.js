@@ -6,8 +6,9 @@ import { endPoint } from "./product.endpoint.js";
 import { asyncHandler } from "../../services/errorHandling.js";
 import { validation } from "../../middleware/validation.js";
 import * as validators from './product.validation.js';
+import reviewRouter from '../review/review.router.js'
 const router = Router();
-
+router.use('/:productId/review',reviewRouter)
 router.get('/', asyncHandler(productController.getProducts));
 router.post('/', auth(endPoint.create), fileUpload(fileValidation.image).fields([
     { name: 'mainImage', maxCount: 1 },
