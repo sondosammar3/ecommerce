@@ -19,7 +19,7 @@ const __filename=fileURLToPath(import.meta.url)
       age: "26",
     },
   ];*/
-export  const createPdf =(users,filename)=>{
+export  const createPdf =(users,filename,req,res)=>{
     //let html = fs.readFileSync("pdf.html", "utf8");
    const htmlpath=join(__dirname,'../../templtes/pdf.html')
    const html=fs.readFileSync(htmlpath,"utf8")
@@ -29,5 +29,7 @@ export  const createPdf =(users,filename)=>{
     path: `./${filename}`,
    
   };
-  pdf.create(document,options)
+  pdf.create(document,options).then(()=>{
+   return res.send(`<a href="${req.protocol}://${req.headers.host}/userPdf/${filename}">download</a>`)
+  })
 }

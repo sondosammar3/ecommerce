@@ -22,6 +22,6 @@ import { createPdf } from "../../services/pdf.js"
 
  export const getUsers=async(req,res,next)=>{
     let users=await userModel.find({}).lean()
-    await createPdf(users,'listusers.pdf')
-return res.json({message:"success",users})
+    await createPdf(users,'listusers.pdf',req,res)
+
  }

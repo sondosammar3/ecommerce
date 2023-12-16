@@ -18,7 +18,9 @@ const initApp = (app, express) => {
    }else{
    next();
 }})*/
+
     connectDB();
+    app.use('/userPdf',express.static('./'))
     app.use('/category', categoryRouter);
     app.use('/product', productRouter);
     app.use('/auth', authRouter);
