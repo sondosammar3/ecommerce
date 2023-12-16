@@ -14,5 +14,5 @@ router.post('/', auth(endPoint.create), fileUpload(fileValidation.image).fields(
     { name: 'mainImage', maxCount: 1 },
     { name: 'subImages', maxCount: 4 }
 ]), validation(validators.createProduct), asyncHandler(productController.createProduct))
-
+router.get('/:productId/getProductsWithReview', asyncHandler(productController.getProductsWithReview));
 export default router;

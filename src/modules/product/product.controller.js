@@ -27,7 +27,7 @@ export const getProducts = async (req, res) => {
     mongooseQuery = mongooseQuery.select(req.query.fields?.replaceAll(',', ' '))
                                  .limit(limit)
                                  .skip(skip)
-                                 .sort(req.query.sort?.replaceAll(',', ' '));
+                                 .sort(req.query.sort?.replaceAll(',', ' ')).populate('reviews');
     const products = await mongooseQuery;
     return res.json({ message: "success", pageCount: products.length, totalCount: count, products });
 }
@@ -65,4 +65,10 @@ export const createProduct = async (req, res) => {
 export const getProductsWithCategory=async(req,res)=>{
     const product=await productModel.find({categoryId:req.params.categoryId})
     return res.status(200).json({message:"success",product})  
+}
+
+export const getProductsWithReview=async(req,res)=>{
+    const product =await productModel.findById(req.params.productId)
+    .populate('reviews')
+    return res.json({message:"success",product})
 }
