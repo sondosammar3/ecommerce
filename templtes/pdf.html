@@ -1,4 +1,4 @@
-><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,14 +6,16 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>hello</h1>
-    <p>this is html file</p>
-    <ul>
+  
+   <table border="'1">
         {{#each users}}
-        <li>name:{{this.name}}</li>
-        <li>name:{{this.age}}</li>
+      <tr>
+    <td> {{this.userName}}</td>
+      <td> {{this.email}}</td> 
+    
+    </tr>
         {{/each}}
-    </ul>
-    <p>Lorem5000 ipsum dolor sit, amet consectetur adipisicing elit. Enim excepturi error, ea aspernatur, ipsa voluptatum rem temporibus ullam eum pariatur quam aliquam odio. Voluptates quo reiciendis asperiores! Dolore, unde doloremque.</p>
+  </table>  
+  
    </body>
 </html>

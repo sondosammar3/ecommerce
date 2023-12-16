@@ -19,14 +19,14 @@ const __filename=fileURLToPath(import.meta.url)
       age: "26",
     },
   ];*/
-export  const createPdf =(users)=>{
+export  const createPdf =(users,filename)=>{
     //let html = fs.readFileSync("pdf.html", "utf8");
    const htmlpath=join(__dirname,'../../templtes/pdf.html')
    const html=fs.readFileSync(htmlpath,"utf8")
    var document = {
     html: html,
     data: {users},
-    path: "./output.pdf",
+    path: `./${filename}`,
    
   };
   pdf.create(document,options)
