@@ -8,7 +8,6 @@ import userModel from "../../../DB/model/user.model.js"
 import XLSX from 'xlsx'
 import { createPdf } from "../../services/pdf.js"
  export const  uploadUserExcel=async(req,res,next)=>{
-
    const workBook=XLSX.readFile(req.file.path);
    const worksheet = workBook.Sheets[workBook.SheetNames[0]];
    const user=XLSX.utils.sheet_to_json(worksheet)
@@ -25,3 +24,4 @@ import { createPdf } from "../../services/pdf.js"
     await createPdf(users,'listusers.pdf',req,res)
 
  }
+ 
