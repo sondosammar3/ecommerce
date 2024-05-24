@@ -8,10 +8,10 @@ import { validation } from "../../middleware/validation.js";
 import * as validators from './auth.validation.js'
 
 router.post('/signup', Upload(fileValidation.image).single('proPicture'), validation(validators.signup), asyncHandler(authController.signUp));
-router.post('/signin', validation(fileValidation.signin), asyncHandler(authController.signin));
-router.get('/confirmEmail/:token', validation(fileValidation.confirmEmail), asyncHandler(authController.confirmEmail));
-router.patch('/sendCode', validation(fileValidation.sendCode), asyncHandler(authController.sendCode));
-router.patch('/forgetPassword', validation(fileValidation.forgetPassword), asyncHandler(authController.forgetPassword));
+router.post('/signin', validation(validators.signin), asyncHandler(authController.signin));
+router.get('/confirmEmail/:token', validation(validators.confirmEmail), asyncHandler(authController.confirmEmail));
+router.patch('/sendCode', validation(validators.sendCode), asyncHandler(authController.sendCode));
+router.patch('/forgetPassword', validation(validators.forgetPassword), asyncHandler(authController.forgetPassword));
 router.delete('/deleteInvalidConfirm', asyncHandler(authController.deleteInvalidConfirm))
 
 
