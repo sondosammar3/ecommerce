@@ -20,6 +20,7 @@ const initApp = (app, express) => {
 }})*/
 
     connectDB();
+    app.use(cors())
     app.use('/userPdf',express.static('./'))
     app.use('/category', categoryRouter);
     app.use('/product', productRouter);
