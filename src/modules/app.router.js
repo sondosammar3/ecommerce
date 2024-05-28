@@ -7,6 +7,7 @@ import couponRouter from './coupon/coupon.router.js';
 import orderRouter from './order/order.router.js';
 import cartRouter from './cart/cart.router.js'
 import userRouter from './user/user.router.js'
+import cors from 'cors'
 import { globalErrorHandler } from '../services/errorHandling.js';
 import xlsx from 'xlsx'
 const initApp = (app, express) => {
